@@ -93,7 +93,10 @@ cd bin/
 sudo mv * /usr/bin
 ```
 
-### Install
+### Install cmake into pip
+```shell
+sudo pip3 install cmake
+```
 
 ## Install pwnagotchi
 ```shell
