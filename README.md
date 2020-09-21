@@ -1,12 +1,62 @@
 # pwnagotchi-rpi4
 Im gonna get pwnagotchi working on rpi4.
 
+## Install dependencies
+```shell
+sudo apt install golang git build-essential libpcap-dev libusb-1.0-0-dev libnetfilter-queue-dev
+```
+
+## Install python3 and pip3 on the rpi
+
+
 ## Install bettercap
 ```shell
 git clone https://github.com/bettercap/bettercap
 cd bettercap/
 make build
 sudo make intall
+```
+
+## Setup bettercap for start with system
+```shell
+sudo nano /etc/systemd/system/bettercap.service
+```
+
+```text
+[Unit]
+Description=bettercap api.rest service.
+Documentation=https://bettercap.org
+Wants=network.target
+
+[Service]
+Type=simple
+PermissionsStartOnly=true
+ExecStart=/usr/bin/bettercap-launcher
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+```
+
+
+```shell
+sudo nano /usr/local/share/bettercap/caplets/pwnagotchi-auto.cap
+```
+
+```text
+# enable interface monitor mode and define wifi interface to be mon0
+set wifi.interface wlx00
+
+# api listening on http://127.0.0.1:8081/ and ui to http://127.0.0.1
+set api.rest.address 127.0.0.1
+set api.rest.port 8081
+set api.rest.username pwnagotchi
+set api.rest.password pwnagotchi
+set api.rest.websocket true
+
+# go!
+api.rest on
 ```
 
 ## Running bettercap manually
@@ -19,18 +69,13 @@ sudo bettercap -caplet https-ui -iface wlxxxx
 wget "https://github.com/evilsocket/pwngrid/releases/download/v1.10.3/pwngrid_linux_amd64_v1.10.3.zip"
 unzip pwngrid_linux_amd64_v1.10.3.zip
 sudo chmod +x pwngrid
-sudo mv pwngrid /usr/bin
+sudo mv pwngrid /usr/bin/
 ```
+
 ## Set the pwngrid peer service
 ```shell
 sudo nano /etc/systemd/system/pwngrid-peer.service
 ```
-
-
-## Install dependencies
-
-## Install python3 and pip3 on the rpi
-
 
 ## Install pip3 packages
 ```shell
@@ -47,6 +92,8 @@ cd cmk-3.18.2/
 cd bin/
 sudo mv * /usr/bin
 ```
+
+### Install
 
 ## Install pwnagotchi
 ```shell
