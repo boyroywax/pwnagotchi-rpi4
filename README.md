@@ -59,15 +59,35 @@ set api.rest.websocket true
 api.rest on
 ```
 
+```shell
+sudo nano /usr/bin/bettercap-launcher
+```
+
+```text
+#!/usr/bin/env bash
+/usr/bin/monstart
+if [[ $(ifconfig | grep usb0 | grep RUNNING) ]] || [[ $(cat /sys/class/net/eth0/carrier) ]]; then
+  # if override file exists, go into auto mode
+  if [ -f /root/.pwnagotchi-auto ]; then
+    /usr/bin/bettercap -no-colors -caplet pwnagotchi-auto -iface mon0
+  else
+    /usr/bin/bettercap -no-colors -caplet pwnagotchi-manual -iface mon0
+  fi
+else
+  /usr/bin/bettercap -no-colors -caplet pwnagotchi-auto -iface mon0
+fi
+```
+
 ## Running bettercap manually
 ```shell
+sudo bettercap -eval "caplets.update; ui.update; quit"
 sudo bettercap -caplet https-ui -iface wlxxxx
 ```
 
 ## Install pwngrid
 ```shell
-wget "https://github.com/evilsocket/pwngrid/releases/download/v1.10.3/pwngrid_linux_amd64_v1.10.3.zip"
-unzip pwngrid_linux_amd64_v1.10.3.zip
+wget "https://github.com/evilsocket/pwngrid/releases/download/v1.10.3/pwngrid_linux_aarch64_v1.10.3.zip"
+unzip pwngrid_linux_aarch64_v1.10.3.zip
 sudo chmod +x pwngrid
 sudo mv pwngrid /usr/bin/
 ```
